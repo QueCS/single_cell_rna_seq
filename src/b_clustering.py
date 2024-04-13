@@ -10,7 +10,7 @@ os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
 # Set arguments parsing
 arg_parser = argparse.ArgumentParser()
-arg_parser.add_argument("--run_sample", type=str, required=True)
+arg_parser.add_argument("--sample_name", type=str, required=True)
 arg_parser.add_argument(
     "--file_ext",
     type=str,
@@ -21,14 +21,14 @@ arg_parser.add_argument(
 args = arg_parser.parse_args()
 
 # Parse the arguments
-run_sample = args.run_sample
+sample_name = args.sample_name
 file_ext = args.file_ext
 
-output_path = f"../output/{run_sample}/b_clustering/"
+output_path = f"../output/{sample_name}/b_clustering/"
 
 # Read the preprocessed adata .h5ad file
 adata = sc.read_h5ad(
-    f"{output_path}../a_preprocessing/{run_sample}_preprocessed_adata.h5ad"
+    f"{output_path}../a_preprocessing/{sample_name}_preprocessed_adata.h5ad"
 )
 
 # Turn matplotlib interactive mode off
@@ -42,13 +42,13 @@ with plt.rc_context({"interactive": False, "savefig.format": file_ext}):
     # Find the 2k HVG
     sc.pp.highly_variable_genes(adata, n_top_genes=2000)
     sc.pl.highly_variable_genes(adata, show=False)
-    plt.savefig(f"{output_path}/{run_sample}_hvgs", bbox_inches="tight")
+    plt.savefig(f"{output_path}/{sample_name}_hvgs", bbox_inches="tight")
     plt.close()
 
     # Compute PCA
     sc.tl.pca(adata)
     sc.pl.pca_variance_ratio(adata, n_pcs=50, log=True, show=False)
-    plt.savefig(f"{output_path}/{run_sample}_pca_variance", bbox_inches="tight")
+    plt.savefig(f"{output_path}/{sample_name}_pca_variance", bbox_inches="tight")
     plt.close()
 
     # Compute kNN Graph and UMAP
@@ -62,8 +62,8 @@ with plt.rc_context({"interactive": False, "savefig.format": file_ext}):
     metrics = ["louvain", "doublet_score", "n_counts", "n_genes"]
     for metric in metrics:
         sc.pl.umap(adata, color=metric, show=False)
-        plt.savefig(f"{output_path}/{run_sample}_umap_{metric}", bbox_inches="tight")
+        plt.savefig(f"{output_path}/{sample_name}_umap_{metric}", bbox_inches="tight")
         plt.close()
 
 # Save clustered adata as a .h5ad file
-adata.write(f"{output_path}/{run_sample}_clustered_adata.h5ad", compression="gzip")
+adata.write(f"{output_path}/{sample_name}_clustered_adata.h5ad", compression="gzip")

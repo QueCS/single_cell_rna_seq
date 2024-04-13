@@ -1,58 +1,57 @@
-import os
+import pandas as pd
 
-# Extract dataset IDs from .h5 matrix files within data/
-runs_samples = sorted(list([f.split("_filtered_feature_bc_matrix.h5")[0] for f in os.listdir("data/") if f.endswith("_filtered_feature_bc_matrix.h5")]))
+# Extract sample data from data/data.csv
+data_df = pd.read_csv("data/data.csv")
+sample_names = data_df["sample_name"]
 
 # List script outputs
 rule all:
     input:
-        expand("output/{run_sample}/a_preprocessing/{run_sample}_pre_filter_vln.svg", run_sample=runs_samples),
-        expand("output/{run_sample}/a_preprocessing/{run_sample}_pre_filter_scatter.svg", run_sample=runs_samples),
-        expand("output/{run_sample}/a_preprocessing/{run_sample}_scrublet.svg", run_sample=runs_samples),
-        expand("output/{run_sample}/a_preprocessing/{run_sample}_post_filter_vln.svg", run_sample=runs_samples),
-        expand("output/{run_sample}/a_preprocessing/{run_sample}_post_filter_scatter.svg", run_sample=runs_samples),
-        expand("output/{run_sample}/a_preprocessing/{run_sample}_preprocessed_adata.h5ad", run_sample=runs_samples),
-        expand("output/{run_sample}/b_clustering/{run_sample}_hvgs.svg", run_sample=runs_samples),
-        expand("output/{run_sample}/b_clustering/{run_sample}_pca_variance.svg", run_sample=runs_samples),
-        expand("output/{run_sample}/b_clustering/{run_sample}_umap_louvain.svg", run_sample=runs_samples),
-        expand("output/{run_sample}/b_clustering/{run_sample}_umap_doublet_score.svg", run_sample=runs_samples),
-        expand("output/{run_sample}/b_clustering/{run_sample}_umap_n_counts.svg", run_sample=runs_samples),
-        expand("output/{run_sample}/b_clustering/{run_sample}_umap_n_genes.svg", run_sample=runs_samples),
-        expand("output/{run_sample}/b_clustering/{run_sample}_clustered_adata.h5ad", run_sample=runs_samples)
+        expand("output/{sample_name}/a_preprocessing/{sample_name}_pre_filter_vln.svg", sample_name=sample_names),
+        expand("output/{sample_name}/a_preprocessing/{sample_name}_pre_filter_scatter.svg", sample_name=sample_names),
+        expand("output/{sample_name}/a_preprocessing/{sample_name}_scrublet.svg", sample_name=sample_names),
+        expand("output/{sample_name}/a_preprocessing/{sample_name}_post_filter_vln.svg", sample_name=sample_names),
+        expand("output/{sample_name}/a_preprocessing/{sample_name}_post_filter_scatter.svg", sample_name=sample_names),
+        expand("output/{sample_name}/a_preprocessing/{sample_name}_preprocessed_adata.h5ad", sample_name=sample_names),
+        expand("output/{sample_name}/b_clustering/{sample_name}_hvgs.svg", sample_name=sample_names),
+        expand("output/{sample_name}/b_clustering/{sample_name}_pca_variance.svg", sample_name=sample_names),
+        expand("output/{sample_name}/b_clustering/{sample_name}_umap_louvain.svg", sample_name=sample_names),
+        expand("output/{sample_name}/b_clustering/{sample_name}_umap_doublet_score.svg", sample_name=sample_names),
+        expand("output/{sample_name}/b_clustering/{sample_name}_umap_n_counts.svg", sample_name=sample_names),
+        expand("output/{sample_name}/b_clustering/{sample_name}_umap_n_genes.svg", sample_name=sample_names),
+        expand("output/{sample_name}/b_clustering/{sample_name}_clustered_adata.h5ad", sample_name=sample_names)
 
 rule preprocessing:
-    input:
-        matrix = "data/{run_sample}_filtered_feature_bc_matrix.h5"
     output:
-        pre_filter_vln = "output/{run_sample}/a_preprocessing/{run_sample}_pre_filter_vln.svg",
-        pre_filter_scatter = "output/{run_sample}/a_preprocessing/{run_sample}_pre_filter_scatter.svg",
-        scrublet_plot = "output/{run_sample}/a_preprocessing/{run_sample}_scrublet.svg",
-        post_filter_vln = "output/{run_sample}/a_preprocessing/{run_sample}_post_filter_vln.svg",
-        post_filter_scatter = "output/{run_sample}/a_preprocessing/{run_sample}_post_filter_scatter.svg",
-        preprocessed_adata = "output/{run_sample}/a_preprocessing/{run_sample}_preprocessed_adata.h5ad"
+        pre_filter_vln = "output/{sample_name}/a_preprocessing/{sample_name}_pre_filter_vln.svg",
+        pre_filter_scatter = "output/{sample_name}/a_preprocessing/{sample_name}_pre_filter_scatter.svg",
+        scrublet_plot = "output/{sample_name}/a_preprocessing/{sample_name}_scrublet.svg",
+        post_filter_vln = "output/{sample_name}/a_preprocessing/{sample_name}_post_filter_vln.svg",
+        post_filter_scatter = "output/{sample_name}/a_preprocessing/{sample_name}_post_filter_scatter.svg",
+        preprocessed_adata = "output/{sample_name}/a_preprocessing/{sample_name}_preprocessed_adata.h5ad"
     params:
         file_ext = "svg"
     shell:
         """
-        mkdir -p output/{wildcards.run_sample}/a_preprocessing
-        python3 src/a_preprocessing.py --matrix {input.matrix} --run_sample {wildcards.run_sample} --file_ext {params.file_ext}
+        mkdir -p output/{wildcards.sample_name}/a_preprocessing
+        python3 src/a_preprocessing.py --sample_name {wildcards.sample_name} --file_ext {params.file_ext}
         """
 
 rule clustering:
     input:
         preprocessed_adata = rules.preprocessing.output.preprocessed_adata
     output:
-        hvgs_plot = "output/{run_sample}/b_clustering/{run_sample}_hvgs.svg",
-        pca_variance_plot = "output/{run_sample}/b_clustering/{run_sample}_pca_variance.svg",
-        umap_louvain = "output/{run_sample}/b_clustering/{run_sample}_umap_louvain.svg",
-        umap_doublet_score = "output/{run_sample}/b_clustering/{run_sample}_umap_doublet_score.svg",
-        umap_n_counts = "output/{run_sample}/b_clustering/{run_sample}_umap_n_counts.svg",
-        umap_n_genes = "output/{run_sample}/b_clustering/{run_sample}_umap_n_genes.svg",
-        clustered_adata = "output/{run_sample}/b_clustering/{run_sample}_clustered_adata.h5ad"
+        hvgs_plot = "output/{sample_name}/b_clustering/{sample_name}_hvgs.svg",
+        pca_variance_plot = "output/{sample_name}/b_clustering/{sample_name}_pca_variance.svg",
+        umap_louvain = "output/{sample_name}/b_clustering/{sample_name}_umap_louvain.svg",
+        umap_doublet_score = "output/{sample_name}/b_clustering/{sample_name}_umap_doublet_score.svg",
+        umap_n_counts = "output/{sample_name}/b_clustering/{sample_name}_umap_n_counts.svg",
+        umap_n_genes = "output/{sample_name}/b_clustering/{sample_name}_umap_n_genes.svg",
+        clustered_adata = "output/{sample_name}/b_clustering/{sample_name}_clustered_adata.h5ad"
     params:
         file_ext = "svg"
     shell:
         """
-        mkdir -p output/{wildcards.run_sample}/b_clustering
-        python3 src/b_clustering.py --run_sample {wildcards.run_sample} --file_ext {params.file_ext}
+        mkdir -p output/{wildcards.sample_name}/b_clustering
+        python3 src/b_clustering.py --sample_name {wildcards.sample_name} --file_ext {params.file_ext}
         """
