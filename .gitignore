@@ -1,4 +1,5 @@
 .venv
 .snakemake
 output
-data
+data/*
+!data/data_table_example.csv

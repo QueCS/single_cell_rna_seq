@@ -1,0 +1,4 @@
+"sample_name","filtered_matrix_name","expected_doublet_rate"
+"patient_a","patient_a_filtered_feature_bc_matrix.h5","0.08"
+"patient_b","patient_b_filtered_feature_bc_matrix.h5","0.03"
+"patient_c","patient_c_filtered_feature_bc_matrix.h5","0.03"
