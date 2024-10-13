@@ -1,0 +1,5 @@
+shared:
+  samples_csv: "../resources/samples.csv"
+  plot_ext: "svg"
+
+preprocessing:
