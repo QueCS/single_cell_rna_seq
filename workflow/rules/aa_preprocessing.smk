@@ -2,9 +2,9 @@ rule preprocessing:
     input:
         h5_matrix = "../resources/{sample_name}_filtered_feature_bc_matrix.h5"
     output:
-        preprocessed_adata = "../results/{sample_name}/a_preprocessing/{sample_name}_preprocessed_adata.h5ad"
+        preprocessed_adata = "../results/{sample_name}/aa_preprocessing/{sample_name}_preprocessed_adata.h5ad"
     params:
-        results_dir = "../results/{sample_name}/a_preprocessing",
+        results_dir = "../results/{sample_name}/aa_preprocessing",
         sample_name = "{sample_name}",
         plot_ext = config["shared"]["plot_ext"]
     shell:

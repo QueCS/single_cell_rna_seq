@@ -9,4 +9,4 @@ include: "rules/aa_preprocessing.smk"
 
 rule workflow:
     input:
-        expand("../results/{sample_name}/a_preprocessing/{sample_name}_preprocessed_adata.h5ad", sample_name=sample_names)
+        expand("../results/{sample_name}/aa_preprocessing/{sample_name}_preprocessed_adata.h5ad", sample_name=sample_names)
