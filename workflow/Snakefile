@@ -6,11 +6,11 @@ samples_df = pd.read_csv(config["shared"]["samples_csv"])
 sample_names = samples_df["sample_name"]
 
 include: "rules/aa_preprocessing.smk"
-include: "rules/bb_clustering.smk"
-include: "rules/cc_dge.smk"
+include: "rules/ba_clustering.smk"
+include: "rules/ca_dge.smk"
 
 rule workflow:
     input:
         expand("../results/{sample_name}/aa_preprocessing/{sample_name}_preprocessed_adata.h5ad", sample_name=sample_names),
-        expand("../results/{sample_name}/bb_clustering/{sample_name}_clustered_adata.h5ad", sample_name=sample_names),
-        expand("../results/{sample_name}/cc_dge/{sample_name}_dge_adata.h5ad", sample_name=sample_names)
+        expand("../results/{sample_name}/ba_clustering/{sample_name}_clustered_adata.h5ad", sample_name=sample_names),
+        expand("../results/{sample_name}/ca_dge/{sample_name}_dge_adata.h5ad", sample_name=sample_names)

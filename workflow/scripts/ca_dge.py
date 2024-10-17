@@ -25,7 +25,7 @@ plot_ext = args.plot_ext
 
 # Read the preprocessed adata .h5ad file
 adata = sc.read_h5ad(
-    f"../results/{sample_name}/bb_clustering/{sample_name}_clustered_adata.h5ad"
+    f"../results/{sample_name}/ba_clustering/{sample_name}_clustered_adata.h5ad"
 )
 
 # Turn matplotlib interactive mode off
