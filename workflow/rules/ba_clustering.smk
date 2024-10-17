@@ -1,6 +1,6 @@
 rule clustering:
     input:
-        preprocessed_adata = "../results/{sample_name}/aa_preprocessing/{sample_name}_preprocessed_adata.h5ad"
+        rules.preprocessing.output
     output:
         clustered_adata = "../results/{sample_name}/ba_clustering/{sample_name}_clustered_adata.h5ad"
     params:

@@ -1,6 +1,6 @@
 rule dge:
     input:
-        clustered_adata = "../results/{sample_name}/ba_clustering/{sample_name}_clustered_adata.h5ad"
+        rules.clustering.output
     output:
         dge_adata = "../results/{sample_name}/ca_dge/{sample_name}_dge_adata.h5ad"
     params:
