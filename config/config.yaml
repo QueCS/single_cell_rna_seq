@@ -1,6 +1,6 @@
 shared:
-  samples_csv: "../resources/samples.csv"
-  plot_ext: "svg"
+  samples_csv: "../resources/samples.csv" # Two columns: "sample_name","matrix_name"
+  plot_ext: "svg" # Can be either one of: "png", "jpg", "jpeg", "svg", "pdf", "eps", "tif", "tiff"
 
 preprocessing:
 
