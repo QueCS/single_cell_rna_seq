@@ -51,7 +51,7 @@ with plt.rc_context({"interactive": False, "savefig.format": plot_ext}):
     sc.tl.umap(adata, min_dist=0.3, maxiter=200)
 
     # Compute and Plot the Leiden clustering of the UMAP
-    sc.tl.leiden(adata, flavor="igraph", n_iterations=2)
+    sc.tl.leiden(adata, flavor="igraph")
 
     # Overlap QC metrics on UMAP
     metrics = ["leiden", "doublet_score", "n_counts", "n_genes"]
