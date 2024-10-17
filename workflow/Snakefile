@@ -1,16 +1,24 @@
 import pandas as pd
+import numpy as np
 
 configfile: "../config/config.yaml"
 
-samples_df = pd.read_csv(config["shared"]["samples_csv"])
+samples_df = pd.read_csv(config["misc"]["samples_csv"])
 sample_names = samples_df["sample_name"]
+subsampling_iterations = range(1, config["multik"]["subsampling_iterations"] + 1)
+min_leiden_res = config["multik"]["min_leiden_res"]
+max_leiden_res = config["multik"]["max_leiden_res"]
+leiden_res_step = config["multik"]["leiden_res_step"]
+leiden_resolutions = np.arange(min_leiden_res, max_leiden_res + leiden_res_step, leiden_res_step)
 
 include: "rules/aa_preprocessing.smk"
 include: "rules/ba_clustering.smk"
 include: "rules/ca_dge.smk"
+include: "rules/da_multik.smk"
 
 rule workflow:
     input:
         expand("../results/{sample_name}/aa_preprocessing/{sample_name}_preprocessed_adata.h5ad", sample_name=sample_names),
         expand("../results/{sample_name}/ba_clustering/{sample_name}_clustered_adata.h5ad", sample_name=sample_names),
-        expand("../results/{sample_name}/ca_dge/{sample_name}_dge_adata.h5ad", sample_name=sample_names)
+        expand("../results/{sample_name}/ca_dge/{sample_name}_dge_adata.h5ad", sample_name=sample_names),
+        expand("../results/{sample_name}/da_multik/{sample_name}_{subsampling_iteration}/{sample_name}_iter_{subsampling_iteration}_res_{leiden_resolution}_multik_adata.h5ad", sample_name=sample_names, subsampling_iteration=subsampling_iterations, leiden_resolution=leiden_resolutions),

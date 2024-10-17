@@ -6,9 +6,13 @@ rule preprocessing:
     params:
         results_dir = "../results/{sample_name}/aa_preprocessing",
         sample_name = "{sample_name}",
-        plot_ext = config["shared"]["plot_ext"]
+        plot_ext = config["misc"]["plot_ext"]
     shell:
         """
         mkdir -p {params.results_dir}
-        .venv/bin/python3 scripts/aa_preprocessing.py --h5_matrix {input.h5_matrix} --sample_name {params.sample_name} --results_dir {params.results_dir} --plot_ext {params.plot_ext}
+        .venv/bin/python3 scripts/aa_preprocessing.py \
+        --h5_matrix {input.h5_matrix} \
+        --results_dir {params.results_dir} \
+        --sample_name {params.sample_name} \
+        --plot_ext {params.plot_ext}
         """

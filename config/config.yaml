@@ -1,4 +1,4 @@
-shared:
+misc:
   samples_csv: "../resources/samples.csv" # (str) Recapitulative samples table, must have two columns: "sample_name","matrix_name"
   plot_ext: "svg" # (str) Can be either one of: "png", "jpg", "jpeg", "svg", "pdf", "eps", "tif", "tiff"
 
@@ -7,3 +7,10 @@ preprocessing:
 clustering:
 
 dge:
+
+multik:
+  subsampling_fraction: 0.8 # (float) Proportion of cells to subsample
+  subsampling_iterations: 100 # (int) Number of subsamplings to iterate on
+  min_leiden_res: 0.5 # (float) Minimum coarseness of the Leiden clustering
+  max_leiden_res: 2.00 # (float) Maximum coarseness
+  leiden_res_step: 0.5 # (float) Coarseness levels stepping
