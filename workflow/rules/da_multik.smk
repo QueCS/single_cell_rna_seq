@@ -1,11 +1,10 @@
 rule multik:
     input:
-        rules.preprocessing.output,
-        rules.clustering.output
+        rules.preprocessing.output
     output:
-        multik_adata = "../results/{sample_name}/da_multik/{sample_name}_{subsampling_iteration}/{sample_name}_iter_{subsampling_iteration}_res_{leiden_resolution}multik_adata.h5ad"
+        multik_adata = "../results/{sample_name}/da_multik/{sample_name}_iter_{subsampling_iteration}/{sample_name}_iter_{subsampling_iteration}_res_{leiden_resolution}_multik_adata.h5ad"
     params:
-        results_dir = "../results/{sample_name}/da_multik/{sample_name}_{subsampling_iteration}",
+        results_dir = "../results/{sample_name}/da_multik/{sample_name}_iter_{subsampling_iteration}",
         sample_name = "{sample_name}",
         plot_ext = config["misc"]["plot_ext"],
         subsampling_fraction = config["multik"]["subsampling_fraction"]

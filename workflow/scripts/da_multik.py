@@ -26,7 +26,7 @@ sample_name = args.sample_name
 results_dir = args.results_dir
 subsampling_iteration = args.subsampling_iteration
 subsampling_fraction = args.subsampling_fraction
-leiden_resolution = float(args.leiden_resolution[:-1])
+leiden_resolution = args.leiden_resolution
 plot_ext = args.plot_ext
 
 # Read the preprocessed adata .h5ad file
@@ -54,7 +54,7 @@ adata.obs["subsampling_fraction"] = subsampling_fraction
 adata.obs["subsampling_and_leiden_seed"] = seed
 
 # Turn matplotlib interactive mode off
-with plt.rc_context({"interactive": False, "savefig.format": plot_ext}):
+with plt.rc_context({"interactive": False}):
     # Normalization
     adata.layers["raw_counts"] = adata.X.copy()
     sc.pp.normalize_total(adata)
@@ -63,13 +63,19 @@ with plt.rc_context({"interactive": False, "savefig.format": plot_ext}):
     # Find the 2k HVG
     sc.pp.highly_variable_genes(adata, n_top_genes=2000)
     sc.pl.highly_variable_genes(adata, show=False)
-    plt.savefig(f"{results_dir}/{sample_name}_hvgs", bbox_inches="tight")
+    plt.savefig(
+        f"{results_dir}/{sample_name}_iter_{subsampling_iteration}_res_{leiden_resolution}_hvgs.{plot_ext}",
+        bbox_inches="tight",
+    )
     plt.close()
 
     # Compute PCA
     sc.tl.pca(adata)
     sc.pl.pca_variance_ratio(adata, n_pcs=50, log=True, show=False)
-    plt.savefig(f"{results_dir}/{sample_name}_pca_variance", bbox_inches="tight")
+    plt.savefig(
+        f"{results_dir}/{sample_name}_iter_{subsampling_iteration}_res_{leiden_resolution}_pca_variance.{plot_ext}",
+        bbox_inches="tight",
+    )
     plt.close()
 
     # Compute kNN Graph and UMAP
@@ -78,14 +84,17 @@ with plt.rc_context({"interactive": False, "savefig.format": plot_ext}):
 
     # Compute and Plot the Leiden clustering of the UMAP
     sc.tl.leiden(
-        adata, flavor="igraph", resolution=leiden_resolution, random_state=seed
+        adata, flavor="igraph", resolution=float(leiden_resolution), random_state=seed
     )
 
     # Overlap QC metrics on UMAP
     metrics = ["leiden", "doublet_score", "n_counts", "n_genes"]
     for metric in metrics:
         sc.pl.umap(adata, color=metric, show=False)
-        plt.savefig(f"{results_dir}/{sample_name}_umap_{metric}", bbox_inches="tight")
+        plt.savefig(
+            f"{results_dir}/{sample_name}_iter_{subsampling_iteration}_res_{leiden_resolution}_umap_{metric}.{plot_ext}",
+            bbox_inches="tight",
+        )
         plt.close()
 
 # Save processed adata as a .h5ad file

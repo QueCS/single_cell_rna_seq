@@ -11,6 +11,6 @@ dge:
 multik:
   subsampling_fraction: 0.8 # (float) Proportion of cells to subsample
   subsampling_iterations: 100 # (int) Number of subsamplings to iterate on
-  min_leiden_res: 0.5 # (float) Minimum coarseness of the Leiden clustering
-  max_leiden_res: 2.00 # (float) Maximum coarseness
-  leiden_res_step: 0.5 # (float) Coarseness levels stepping
+  min_leiden_res: 0.05 # (.2f float) Minimum coarseness of the Leiden clustering
+  max_leiden_res: 1.00 # (.2f float) Maximum coarseness
+  leiden_res_step: 0.05 # (.2f float) Coarseness levels stepping
