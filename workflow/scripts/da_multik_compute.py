@@ -97,8 +97,15 @@ with plt.rc_context({"interactive": False}):
         )
         plt.close()
 
-# Save processed adata as a .h5ad file
-adata.write(
-    f"{results_dir}/{sample_name}_iter_{subsampling_iteration}_res_{leiden_resolution}_multik_adata.h5ad",
-    compression="gzip",
-)
+    # Store clustering metrics as a csv
+    n_clusters = len(set(adata.obs["leiden"]))
+    with open(
+        f"{results_dir}/{sample_name}_iter_{subsampling_iteration}_res_{leiden_resolution}_multik_results.csv",
+        "w",
+    ) as f:
+        f.write(
+            '"sample_name","subsampling_iteration","random_seed","leiden_resolution","n_clusters"\n'
+        )
+        f.write(
+            f'"{sample_name}","{subsampling_iteration}","{seed}","{leiden_resolution}","{n_clusters}"'
+        )

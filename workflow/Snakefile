@@ -18,7 +18,8 @@ include: "rules/da_multik.smk"
 
 rule workflow:
     input:
-        expand("../results/{sample_name}/aa_preprocessing/{sample_name}_preprocessed_adata.h5ad", sample_name=sample_names),
-        expand("../results/{sample_name}/ba_clustering/{sample_name}_clustered_adata.h5ad", sample_name=sample_names),
-        expand("../results/{sample_name}/ca_dge/{sample_name}_dge_adata.h5ad", sample_name=sample_names),
-        expand("../results/{sample_name}/da_multik/{sample_name}_iter_{subsampling_iteration}/{sample_name}_iter_{subsampling_iteration}_res_{leiden_resolution}_multik_adata.h5ad", sample_name=sample_names, subsampling_iteration=subsampling_iterations, leiden_resolution=leiden_resolutions),
+        expand(rules.preprocessing.output, sample_name=sample_names),
+        expand(rules.clustering.output, sample_name=sample_names),
+        expand(rules.dge.output, sample_name=sample_names),
+        expand(rules.multik_compute.output, sample_name=sample_names, subsampling_iteration=subsampling_iterations, leiden_resolution=leiden_resolutions),
+        expand(rules.multik_collect.output, sample_name=sample_names)
